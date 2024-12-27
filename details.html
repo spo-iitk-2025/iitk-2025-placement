@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Company Details</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 80px;
+        background: #fff9e4;
+    }
+    .container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px; /* Space between boxes */
+        justify-content: space-around; /* Center aligning the boxes */
+    }
+    .detail-item {
+        background: white;
+        border: 1px solid #ccc;
+        padding: 15px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        width: 45%; /* Nearly half width to fit two in a line */
+        margin-bottom: 5px;
+        margin-right: 5px;
+        margin-left: 5px;
+    }
+    .detail-item strong {
+        display: block; /* Make titles go on their own line */
+        color: #333;
+        margin-bottom: 5px; /* Space between title and content */
+        font-size: 16px;
+    }
+    .detail-item .content {
+        color: #666;
+        font-size: 14px;
+    }
+    .eligibility{
+        background: white;
+        border: 1px solid #ccc;
+        padding: 15px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        width: 95%; /* Nearly half width to fit two in a line */
+        margin-bottom: 5px;
+        margin-right: 5px;
+        margin-left: 5px;
+    }
+
+    .container, .details-section {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px; /* Space between boxes */
+        justify-content: space-around; /* Center aligning the boxes */
+
+    }
+    .bold{
+        font-weight: bold;
+    }
+
+    table {
+        width: 100%;
+        margin-top: 10px;
+        margin-left: 0;
+        margin-right: 0;
+        margin-bottom: 0;
+        border-collapse: collapse;
+        table-layout: fixed; /* Ensures even column sizing */
+        background-color: white;
+    }
+    th, td {
+        border: 1px solid #ccc;
+        padding: 8px;
+        text-align: center;
+        
+    }
+    th {
+        background-color: #eee;
+        font-weight: bold;
+    }
+
+    #heading{
+        text-align: center;
+    }
+</style>
+</head>
+<body>
+<h1 id="heading"></h1>
+
+<div class="container" id="detailsContainer"></div>
+
+<script>
+
+function formatEligibility(eligibilityString) {
+    const formattedString = eligibilityString
+        .replace(/Y/g, '<span style="color: green;"><i class="fas fa-check"></i></span>') // Green checkmark
+        .replace(/N/g, '<span style="color: red;"><i class="fas fa-times"></i></span>');// Red cross mark
+        //.replace(/'-'/g, '<span style="color: black;"><i class="fas fa-minus"></i></span>'); // Black minus using Font Awesome 
+    return formattedString;
+}
+
+function loadHeading() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const index = urlParams.get('index');
+
+    fetch('data.json')
+    .then(response => response.json())
+    .then(data => {
+        const company = data[index];
+        const heading = document.getElementById('heading');
+        heading.innerHTML = ` ${company["Company Name"] || 'NA'} - Company Details`;
+    })
+    .catch(error => console.error('Error loading the data:', error));
+}
+
+function formatText(text) {
+    return text.replace(/\n/g, '<br>');  // Use regular expression to replace all occurrences
+}
+
+function loadDetails() {
+    loadHeading();
+    const urlParams = new URLSearchParams(window.location.search);
+    const index = urlParams.get('index');
+
+    fetch('data.json')
+    .then(response => response.json())
+    .then(data => {
+        const company = data[index];
+        const formattedJobDescription = formatText(company["Job Description"] || 'NA');
+        const f1 = formatText(company["Cost To Company"] || 'NA');
+        const f2 = formatText(company["Total CTC"] || 'NA');
+        const detailsContainer = document.getElementById('detailsContainer');
+        detailsContainer.innerHTML = `
+            <div class="detail-item"><strong>Company Name:</strong> <span class="content">${company["Company Name"] || 'NA'}</span></div>
+            <div class="detail-item"><strong>Nature of Business:</strong> <span class="content">${company["Nature of Business"] || 'NA'}</span></div>
+            <div class="detail-item"><strong>Profile:</strong> <span class="content">${company.Profile || 'NA'}</span></div>
+            <div class="detail-item"><strong>Job Location:</strong> <span class="content">${company["Job Location"] || 'NA'}</span></div>
+            <div class="detail-item"><strong>Job Description:</strong> <span class="content">${formattedJobDescription || 'NA'}</span></div>
+            <div class="detail-item"><strong>CTC (INR):</strong> <span class="content">${company["CTC (in INR)"] || 'NA'}</span></div>
+            <div class="detail-item"><strong>CTC (Foreign Currency):</strong> <span class="content">${company["CTC (in foreign currency)"] || 'NA'}</span></div>
+            <div class="detail-item"><strong>Cost To Company:</strong> <span class="content">${f1 || 'NA'}</span></div>
+            <div class="detail-item"><strong>Gross (per annum):</strong> <span class="content">${company["Gross (per annum)"] || 'NA'}</span></div>
+            <div class="detail-item"><strong>Fixed Take Home Salary:</strong> <span class="content">${company["Fixed take home salary (per annum)"] || 'NA'}</span></div>
+            <div class="detail-item"><strong>Base Salary:</strong> <span class="content">${company["Base Salary"] || 'NA'}</span></div>
+            <div class="detail-item"><strong>Joining Bonus:</strong> <span class="content">${company["Joining Bonus"] || 'NA'}</span></div>
+            <div class="detail-item"><strong>Relocation Bonus:</strong> <span class="content">${company["Relocation Bonus"] || 'NA'}</span></div>
+            <div class="detail-item"><strong>Retention Bonus:</strong> <span class="content">${company["Retention Bonus"] || 'NA'}</span></div>
+            <div class="detail-item"><strong>Deductions:</strong> <span class="content">${company.Deductions || 'NA'}</span></div>
+            <div class="detail-item"><strong>1st Year CTC:</strong> <span class="content">${company["1st Year CTC"] || 'NA'}</span></div>
+            <div class="detail-item"><strong>Total CTC:</strong> <span class="content">${f2 || 'NA'}</span></div>
+            <div class="detail-item"><strong>Perks:</strong> <span class="content">${company.Perks || 'NA'}</span></div>
+            <div class="detail-item"><strong>Bond Details:</strong> <span class="content">${company["Bond Details"] || 'NA'}</span></div>
+            <div class="detail-item"><strong>Medical Requirements:</strong> <span class="content">${company["Medical Requirements"] || 'NA'}</span></div>
+            <div class="eligibility"><strong>Eligibility:</strong><br>${generateEligibilityTable(company.Eligibility || '')}</div>
+     
+        `;
+        // detailsContainer.innerHTML += ;
+        // detailsContainer.innerHTML += `</span></div>`
+    })
+    .catch(error => console.error('Error loading the data:', error));
+}
+
+function generateEligibilityTable(eligibilityString) {
+    const programs = ['AE', 'BSBE', 'CE', 'CHE', 'CSE', 'EE', 'MSE', 'ME', 'CHM', 'ECO', 'ES', 'MTH', 'SDS', 'PHY', 'CGS', 'DES', 'IME', 'MSP', 'NET', 'PSE', 'Stats', 'HSS', 'Mathematics', 'SEE', 'SSA'];
+    const columns = ['BT', 'BS', 'DoubleMajor', 'DualA', 'DualB', 'DualC', 'MT', 'MSR', 'MSc', 'MDes', 'MBA', 'PhD'];
+    let tableHTML = '<table><thead><tr><th>Program</th>';
+
+    // Generate column headers
+    columns.forEach(col => {
+        tableHTML += `<th>${col}</th>`;
+    });
+    tableHTML += '</tr></thead><tbody>';
+
+    // Parse each program's eligibility data, each character represents one column
+    const eligibilityRows = eligibilityString.match(/.{1,12}/g); // Assuming each program has exactly 12 columns
+
+    eligibilityRows.forEach((row, index) => {
+        if (index < programs.length) {
+            tableHTML += `<tr><td class = "bold">${programs[index]}</td>`;
+            for (let i = 0; i < row.length; i++) {
+                tableHTML += `<td>${formatEligibility(row[i])}</td>`; // Each character in its own cell
+            }
+            tableHTML += '</tr>';
+        }
+    });
+
+    tableHTML += '</tbody></table>';
+    return tableHTML;
+}
+
+window.onload = loadDetails;
+</script>
+</body>
+</html>
