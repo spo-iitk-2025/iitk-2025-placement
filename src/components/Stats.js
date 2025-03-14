@@ -7,7 +7,7 @@ const Stats = () => {
   const [filterText, setFilterText] = useState('');
 
   useEffect(() => {
-    fetch('${process.env.PUBLIC_URL}/stats.json')
+    fetch('https://spo-iitk-2025.github.io/iitk-2025-placement/stats.json')
       .then(res => res.json())
       .then(data => setStatsData(data))
       .catch(err => console.error('Error loading data:', err));
