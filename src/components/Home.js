@@ -12,6 +12,7 @@ const Home = () => {
       .then(res => res.json())
       .then(data => {
         // Store original index with each row .
+        console.log("data.json fetched");
         const dataWithIndex = data.map((company, index) => ({
           ...company,
           originalIndex: index, // Preserve original index
