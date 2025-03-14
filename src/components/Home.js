@@ -40,12 +40,17 @@ const Home = () => {
   ];
 
   // Filter the data based on search input
-  const filteredData = companies.filter(item =>
-    Object.values(item)
-      .join(' ')
-      .toLowerCase()
-      .includes(filterText.toLowerCase())
-  );
+  const filteredData = companies.filter(item => {
+    const searchString = (
+      (item["Company Name"] || "") +
+      " " +
+      (item["Nature of Business"] || "") +
+      " " +
+      (item["Profile"] || "")
+    ).toLowerCase();
+    return searchString.includes(filterText.toLowerCase());
+  });
+  
 
   return (
     <div style={{ backgroundColor: '#f0f2f5', minHeight: '100vh', padding: '20px', marginTop: '20px' }}>
