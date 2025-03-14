@@ -24,7 +24,7 @@ const Details = () => {
   const [company, setCompany] = useState(null);
 
   useEffect(() => {
-    fetch('/data.json')
+    fetch('${process.env.PUBLIC_URL}/data.json')
       .then((res) => res.json())
       .then((data) => setCompany(data[index]))
       .catch((err) => console.error('Error loading data:', err));
