@@ -1,5 +1,7 @@
 // src/components/Stats.js
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+
 import DataTable from 'react-data-table-component';
 
 const Stats = () => {
@@ -7,7 +9,7 @@ const Stats = () => {
   const [filterText, setFilterText] = useState('');
 
   useEffect(() => {
-    fetch('https://spo-iitk-2025.github.io/iitk-2025-placement/stats.json')
+    fetch('https://juggernautjha.gitlab.io/assets/stats_augmented.json')
       .then(res => res.json())
       .then(data => setStatsData(data))
       .catch(err => console.error('Error loading data:', err));
@@ -20,6 +22,15 @@ const Stats = () => {
     { name: 'Company Name', selector: row => row.company_name, sortable: true },
     { name: 'Profile', selector: row => row.profile, sortable: true },
     { name: 'Branch', selector: row => row.program_department, sortable: true },
+    { name: 'CTC', selector: row => row.gross, sortable: true},
+    { name: 'Proforma', cell: row => (
+            <Link to={`/details/${row.proforma_idx}`} style={{ textDecoration: 'none', color: '#1976d2' }}>
+              View Details
+            </Link>
+          ),
+          ignoreRowClick: true,
+          allowOverflow: true,
+          button: true, },
   ];
 
   // Filter data based on search text
